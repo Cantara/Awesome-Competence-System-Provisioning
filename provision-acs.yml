@@ -1,0 +1,9 @@
+---
+# This playbook deploys a ACS to a Ubuntu server
+- name: Set up ACS on server
+  hosts: frontend_server
+  user: ubuntu
+#  sudo: True
+
+  roles:
+    - acs
