@@ -1,0 +1,8 @@
+---
+# This playbook deploys a ACS to a Ubuntu server
+-  hosts: tomcat-servers 
+  user: ubuntu
+#  sudo: True
+
+  roles:
+    - acs
