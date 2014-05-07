@@ -1,2 +1,6 @@
 [frontend_server]
 serveraddress
+
+#For EC2 Provisioning
+[local]
+localhost

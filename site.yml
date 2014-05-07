@@ -1,6 +1,7 @@
 ---
 # This playbook deploys a ACS to a Ubuntu server
--  hosts: tomcat-servers 
+- name: Set up ACS on server
+  hosts: frontend_server
   user: ubuntu
 #  sudo: True
 
