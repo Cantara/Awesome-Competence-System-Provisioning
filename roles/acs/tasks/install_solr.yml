@@ -1,0 +1,49 @@
+# Jetty creates its own user
+#- name: create "Solr" user solr
+#  user: name=solr
+#  sudo: True
+
+#- name: Fetch Solr distro
+#  get_url: url={{solr_download_url}} dest=/tmp/{{solr_ident}}.tgz
+#  register: solr_download
+
+#- name: Pack out Solr
+#  sudo: True
+#  sudo_user: solr
+#  command: tar -xf /tmp/{{solr_ident}}.tgz -C /home/solr/
+#  when: solr_download.changed
+
+
+- name: Install Solr Search engine
+  apt: name=solr-jetty
+  sudo: True
+
+- name: Configure Jetty to be startable
+  lineinfile: dest=/etc/default/jetty regexp="NO_START=" line="NO_START=0"
+  sudo: True
+  register: JettyRestarted
+
+- name: Start up jetty/Solr
+  sudo: True
+  service: name=jetty state=restarted
+  when: JettyRestarted.changed #Jetty is only restarted when config is changed
+
+- name: Set ProxyPass
+  lineinfile: dest=/etc/apache2/sites-available/000-default.conf regexp="ProxyPass /solr/" line="ProxyPass /solr/ http://{{servername}}:8983/solr/"
+  sudo: True
+  register: ProxyPass
+
+- name: Set ProxyPassReverse
+  lineinfile: dest=/etc/apache2/sites-available/000-default.conf regexp="ProxyPassReverse /solr/" line="ProxyPassReverse /solr/ http://{{servername}}:8983/solr/"
+  sudo: True
+  register: ProxyPass
+
+- name: Install Mod Proxy Apache module
+  command: a2enmod proxy
+  sudo: True
+  when: ProxyPass.changed
+
+- name: Restart Apache
+  sudo: True
+  service: name=apache2 state=restarted
+  when: ProxyPass.changed #Apache is only restarted when config is changed

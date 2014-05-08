@@ -1,0 +1,3 @@
+apache_server_name: altubutu01
+solr_download_url: http://apache.uib.no/lucene/solr/4.8.0/solr-4.8.0.tgz
+solr_ident: solr-4.4.0

@@ -1,2 +1,6 @@
 ---
-- include: install_httpd.yml
+- include: install_apache.yml
+- include: install_django.yml
+- include: install-other-dependencies.yml
+- include: install_solr.yml
+

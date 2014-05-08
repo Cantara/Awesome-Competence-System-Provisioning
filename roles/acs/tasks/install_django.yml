@@ -1,0 +1,11 @@
+---
+# These tasks install Django Web application framework
+
+- name: create "Django" user cvapp
+  user: name=cvapp
+  sudo: True
+
+
+- name: Install Django Web framework
+  sudo: True
+  apt: name=python-django state=present

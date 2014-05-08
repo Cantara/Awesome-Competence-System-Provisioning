@@ -6,8 +6,16 @@
   apt: name={{ item }} state=present
   with_items:
    - apache2
-   - git
-   - lynx
-   
-- name: http service state
-  service: name=apache2 state=started enabled=yes
+   - libapache2-mod-wsgi
+
+- name: Add servername {{apache_server_name}}
+  lineinfile: dest=/etc/apache2/apache2.conf regexp="ServerName" line="ServerName {{apache_server_name}}"
+  sudo: True
+
+- name: Fix ssl
+  command: make-ssl-cert generate-default-snakeoil --force-overwrite
+  sudo: True
+
+- name: Restart Apache
+  service: name=apache2 state=restarted enabled=yes
+  sudo: True
