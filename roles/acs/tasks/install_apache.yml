@@ -3,19 +3,29 @@
 
 - name: Install Apache
   sudo: True
-  apt: name={{ item }} state=present
+  apt: name={{ item }} state=present update_cache=yes cache_valid_time=3600
   with_items:
-   - apache2
+   - apache2   
    - libapache2-mod-wsgi
 
-- name: Add servername {{apache_server_name}}
-  lineinfile: dest=/etc/apache2/apache2.conf regexp="ServerName" line="ServerName {{apache_server_name}}"
+#- name: Add servername {{apache_server_name}}
+#  lineinfile: dest=/etc/apache2/apache2.conf regexp="ServerName" line="ServerName {{apache_server_name}}"
+#  sudo: True
+
+- name: Install Mod Proxy Apache module
+  command: a2enmod proxy
   sudo: True
 
 - name: Fix ssl
   command: make-ssl-cert generate-default-snakeoil --force-overwrite
   sudo: True
 
-- name: Restart Apache
-  service: name=apache2 state=restarted enabled=yes
+- name: Copy ACS Apache config
+  copy: src=acs.conf dest=/etc/apache2/sites-available/acs.conf owner=root group=root mode=644
   sudo: True
+
+- name: Create symlink for ACS apache conf
+  file: src=/etc/apache2/sites-available/acs.conf dest=/etc/apache2/sites-enabled/acs.conf owner=root group=root state=link
+  sudo: True
+  notify:
+    - restart apache

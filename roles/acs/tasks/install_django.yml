@@ -1,11 +1,20 @@
 ---
 # These tasks install Django Web application framework
+- name: Install git dependencies
+  sudo: True
+  apt: name={{ item }} state=present
+  with_items:
+   - git
+   - python-django
 
-- name: create "Django" user cvapp
-  user: name=cvapp
+- name: create "Django" user acs-user
+  user: name=acs-user
+  sudo: True
+
+- name: Git clone Awesome-Competence-System into acs-user
+  action: git repo=https://github.com/altran/Awesome-Competence-System.git dest=/home/acs-user/acs
+  sudo_user: acs-user
   sudo: True
 
 
-- name: Install Django Web framework
-  sudo: True
-  apt: name=python-django state=present
+

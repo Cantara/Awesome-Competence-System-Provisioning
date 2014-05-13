@@ -1,6 +1,7 @@
 ---
-- include: install_apache.yml
-- include: install_django.yml
-- include: install-other-dependencies.yml
-- include: install_solr.yml
+ - include: locale.yml
+ - include: install_apache.yml
+ - include: install_django.yml
+ - include: install_solr.yml
+ - include: libreoffice.yml
 

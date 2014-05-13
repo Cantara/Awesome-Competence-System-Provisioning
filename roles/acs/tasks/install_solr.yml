@@ -14,8 +14,17 @@
 #  when: solr_download.changed
 
 
-- name: Install Solr Search engine
-  apt: name=solr-jetty
+- name: Install Solr and Java dependencies
+  sudo: True
+  apt: name={{ item }} state=present
+  with_items:
+   - openjdk-7-jdk 
+   - openjdk-7-doc 
+   - openjdk-7-source
+   - solr-jetty
+
+- name: Copy Solr password file
+  copy: src=solr-password dest=/home/acs-user/password owner=acs-user group=acs-user
   sudo: True
 
 - name: Configure Jetty to be startable
@@ -26,24 +35,7 @@
 - name: Start up jetty/Solr
   sudo: True
   service: name=jetty state=restarted
-  when: JettyRestarted.changed #Jetty is only restarted when config is changed
-
-- name: Set ProxyPass
-  lineinfile: dest=/etc/apache2/sites-available/000-default.conf regexp="ProxyPass /solr/" line="ProxyPass /solr/ http://{{servername}}:8983/solr/"
-  sudo: True
-  register: ProxyPass
-
-- name: Set ProxyPassReverse
-  lineinfile: dest=/etc/apache2/sites-available/000-default.conf regexp="ProxyPassReverse /solr/" line="ProxyPassReverse /solr/ http://{{servername}}:8983/solr/"
-  sudo: True
-  register: ProxyPass
-
-- name: Install Mod Proxy Apache module
-  command: a2enmod proxy
-  sudo: True
-  when: ProxyPass.changed
 
 - name: Restart Apache
   sudo: True
   service: name=apache2 state=restarted
-  when: ProxyPass.changed #Apache is only restarted when config is changed
