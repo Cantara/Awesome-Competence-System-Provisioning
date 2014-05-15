@@ -4,7 +4,8 @@
 
 - name: Configure Libreoffice
   shell: soffice --invisible --headless "--accept=socket,host=localhost,port=2002;urp;"
-
+  sudo_user: acs-user
+  sudo: True
 
 - name: Cron for restarting Libreoffice
   cron: name="Libreoffice restart" minute="0" hour="3" job="soffice --invisible --headless '--accept=socket,host=localhost,port=2002;urp;'" user=acs-user

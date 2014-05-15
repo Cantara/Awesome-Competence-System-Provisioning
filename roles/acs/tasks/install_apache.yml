@@ -29,3 +29,13 @@
   sudo: True
   notify:
     - restart apache
+
+
+#- name: Put app.sh into path
+#  action: file src=/opt/appsh/app dest=/usr/local/bin/app owner=root group=root state=link
+
+- name: Python Collect static files
+  command: python /home/acs-user/acs/cvapp/manage.py collectstatic
+  sudo: True
+  sudo_user: acs-user
+
