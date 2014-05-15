@@ -7,35 +7,37 @@
   with_items:
    - apache2   
    - libapache2-mod-wsgi
+  tags: apache
 
-#- name: Add servername {{apache_server_name}}
-#  lineinfile: dest=/etc/apache2/apache2.conf regexp="ServerName" line="ServerName {{apache_server_name}}"
-#  sudo: True
-
-- name: Install Mod Proxy Apache module
+- name: Enable Mod Proxy Apache module
   command: a2enmod proxy
   sudo: True
+  tags: apache
 
-- name: Fix ssl
-  command: make-ssl-cert generate-default-snakeoil --force-overwrite
-  sudo: True
+###SSL Fix not needed <- todo remove!
+#- name: Fix ssl
+#  command: make-ssl-cert generate-default-snakeoil --force-overwrite
+#  sudo: True
+#  tags: apache
 
 - name: Copy ACS Apache config
   copy: src=acs.conf dest=/etc/apache2/sites-available/acs.conf owner=root group=root mode=644
   sudo: True
+  tags: apache  
+
+- name: Create dir for WSGI.py symlink
+  file: state=directory recurse=yes path=/var/www/acs owner=root group=root
+  sudo: True
+  tags: apache  
+
+- name: Create symlink for WSGI.py
+  file: src=/home/acs-user/acs/cvapp/wsgi.py dest=/var/www/acs/wsgi.py owner=root group=root state=link
+  sudo: True
+  tags: apache  
 
 - name: Create symlink for ACS apache conf
   file: src=/etc/apache2/sites-available/acs.conf dest=/etc/apache2/sites-enabled/acs.conf owner=root group=root state=link
   sudo: True
   notify:
-    - restart apache
-
-
-#- name: Put app.sh into path
-#  action: file src=/opt/appsh/app dest=/usr/local/bin/app owner=root group=root state=link
-
-- name: Python Collect static files
-  command: python /home/acs-user/acs/cvapp/manage.py collectstatic
-  sudo: True
-  sudo_user: acs-user
-
+    - restart apache  
+  tags: apache

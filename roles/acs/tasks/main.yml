@@ -1,7 +1,7 @@
 ---
-# - include: locale.yml
-# - include: install_apache.yml
+ - include: locale.yml
+ - include: install_apache.yml
  - include: install_django.yml
-# - include: install_solr.yml
-# - include: libreoffice.yml
+ - include: install_solr.yml
+ - include: libreoffice.yml
 
