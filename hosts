@@ -1,2 +1,5 @@
-[frontend_server]
-ec2-54-76-14-56.eu-west-1.compute.amazonaws.com
+[ACS_Frontend]
+
+[Solr_server]
+
+[Libreoffice_server]
