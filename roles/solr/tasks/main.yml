@@ -1,0 +1,28 @@
+- name: Install Solr and Java dependencies
+  apt: name={{ item }} state=present
+  with_items:
+   - openjdk-7-jdk 
+   - openjdk-7-doc 
+   - openjdk-7-source
+
+- name: create "Solr" user solr
+  user: name=solr
+
+- name: Copy Solr startup script
+  get_url: url={{acs_search_github_url}}/master/{{item}} dest=/home/solr/{{item}} mode=0744
+  with_items:
+  # Start-service does not work with upstart
+#    - start-service.sh
+    - update-service.sh
+  sudo_user: solr
+
+- name: Fetch Latest greatest version of AcsSearch
+  command: /home/solr/update-service.sh chdir=/home/solr
+  sudo_user: solr
+
+- name: solr upstart conf
+  copy: src=solr-upstart.conf dest=/etc/init/solr.conf owner=root mode=644
+
+- name: Start Solr service
+  service: name=solr state=started
+  

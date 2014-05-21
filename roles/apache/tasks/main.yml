@@ -2,42 +2,27 @@
 # These tasks install Apache web server
 
 - name: Install Apache
-  sudo: True
   apt: name={{ item }} state=present update_cache=yes cache_valid_time=3600
   with_items:
    - apache2   
    - libapache2-mod-wsgi
-  tags: apache
 
-- name: Enable Mod Proxy Apache module
-  command: a2enmod proxy
-  sudo: True
-  tags: apache
-
-###SSL Fix not needed <- todo remove!
-#- name: Fix ssl
-#  command: make-ssl-cert generate-default-snakeoil --force-overwrite
-#  sudo: True
-#  tags: apache
+- name: Enable Mod Proxy Apache modules
+  command: a2enmod {{item}}
+  with_items:
+    - proxy
+    - proxy_http
 
 - name: Copy ACS Apache config
   copy: src=acs.conf dest=/etc/apache2/sites-available/acs.conf owner=root group=root mode=644
-  sudo: True
-  tags: apache  
 
 - name: Create dir for WSGI.py symlink
   file: state=directory recurse=yes path=/var/www/acs owner=root group=root
-  sudo: True
-  tags: apache  
 
 - name: Create symlink for WSGI.py
   file: src=/home/acs-user/acs/cvapp/wsgi.py dest=/var/www/acs/wsgi.py owner=root group=root state=link
-  sudo: True
-  tags: apache  
 
 - name: Create symlink for ACS apache conf
   file: src=/etc/apache2/sites-available/acs.conf dest=/etc/apache2/sites-enabled/acs.conf owner=root group=root state=link
-  sudo: True
   notify:
-    - restart apache  
-  tags: apache
+    - restart apache

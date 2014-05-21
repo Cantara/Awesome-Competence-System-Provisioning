@@ -1,22 +1,19 @@
 ---
 # These tasks install Django Web application framework
 - name: Install Django dependencies
-  sudo: True
   apt: name={{ item }} state=present
   with_items:
    - git
    - python-pip
    - python-lxml
-   #- libxml2-dev 
-   #- libxslt1-dev
+   - libxml2-dev 
+   - libxslt-dev
    - python-imaging # May be a requirement
    - libpq-dev
    - python-dev
-  tags: django
 
 - name: Install Python dependencies with pip
   pip: name={{item}}
-  sudo: true
   with_items:
    - Django#==1.6.2
    - django-admin-bootstrapped#==1.6.4
@@ -25,38 +22,37 @@
    - appy#==0.8.
    - django-webodt
    - psycopg2
-# - requests // Evt apt-get install
-  tags: django
+# If still problems with lxml: pip install --upgrade lxml
 
 - name: create "Django" user acs-user
   user: name=acs-user group=www-data
-  sudo: True
-  tags: django
 
   # This script will not always run and may require to be run manually
 - name: Git clone Awesome-Competence-System into acs-user
   action: git repo=https://github.com/altran/Awesome-Competence-System.git dest=/home/acs-user/acs
-  tags: django
   sudo_user: acs-user
-  sudo: True
-
-   
 
 #- name: Install django-webodt
 #easy_install: name:django-webodt
 
 - name: Create www/static
   file: state=directory recurse=yes path=/var/www/static
-  sudo: true
-  tags: django
+
+
+- name: Create var/www/media/ photos and templates folders
+  file: state=directory recurse=yes path={{item}} owner=www-data group=www-data
+  with_items:
+    - /var/www/media/photos
+    - /var/www/media/templates
+
+- name: Create Django Log directory
+  file: state=directory recurse=yes path=/var/log/django owner=www-data group=www-data
 
 #Note This does not always happens and running this script manually may be necessary!
 - name: Python Collect static files into /var/www/static
   shell: echo "yes" | python /home/acs-user/acs/cvapp/manage.py collectstatic
-  sudo: true
-  tags: django
 
-- name: Create Django Log directory
-  file: state=directory recurse=yes path=/var/log/django owner=acs-user group=www-data
-  sudo: true
-  tags: django
+# Remember to set the password file manually. The transferred files is only a placeholder
+- name: Copy Solr password file
+  copy: src=solr-password dest=/home/acs-user/password owner=acs-user
+
