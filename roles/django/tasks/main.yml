@@ -22,7 +22,11 @@
    - appy#==0.8.
    - django-webodt
    - psycopg2
+
 # If still problems with lxml: pip install --upgrade lxml
+- name: Upgrade Python Lxml
+  pip: name=lxml
+    extra_args='--upgrade'
 
 - name: create "Django" user acs-user
   user: name=acs-user group=www-data
@@ -31,6 +35,9 @@
 - name: Git clone Awesome-Competence-System into acs-user
   action: git repo=https://github.com/altran/Awesome-Competence-System.git dest=/home/acs-user/acs
   sudo_user: acs-user
+
+- name: Configure Django localsettings.py
+  template: src=localsettings.py.jinja dest=/home/acs-user/acs/cvapp/localsettings.py backup=yes owner=acs-user group=www-data
 
 #- name: Install django-webodt
 #easy_install: name:django-webodt
@@ -46,13 +53,13 @@
     - /var/www/media/templates
 
 - name: Create Django Log directory
-  file: state=directory recurse=yes path=/var/log/django owner=www-data group=www-data
+  file: state=touch recurse=yes path=/var/log/django/logfile owner=www-data group=www-data
 
-#Note This does not always happens and running this script manually may be necessary!
 - name: Python Collect static files into /var/www/static
   shell: echo "yes" | python /home/acs-user/acs/cvapp/manage.py collectstatic
 
-# Remember to set the password file manually. The transferred files is only a placeholder
 - name: Copy Solr password file
-  copy: src=solr-password dest=/home/acs-user/password owner=acs-user
+  template: src=solr-password.jinja dest=/home/acs-user/password backup=yes owner=acs-user
 
+- name: Index ACS site in Solr
+  shell: echo "y" | python /home/acs-user/acs/cvapp/manage.py rebuild_index

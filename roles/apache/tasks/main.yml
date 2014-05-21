@@ -6,12 +6,19 @@
   with_items:
    - apache2   
    - libapache2-mod-wsgi
+   - postfix
 
 - name: Enable Mod Proxy Apache modules
   command: a2enmod {{item}}
   with_items:
     - proxy
     - proxy_http
+
+- name: Set up Postfix nagmail conf
+  copy: src=postfix_main.cf dest=/etc/postfix/main.cf owner=root group=root mode=644 backup=yes
+
+- name: Restart Postfix
+  service: name=postfix state=restarted
 
 - name: Copy ACS Apache config
   copy: src=acs.conf dest=/etc/apache2/sites-available/acs.conf owner=root group=root mode=644

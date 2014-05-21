@@ -1,18 +1,5 @@
 ---
 # This playbook deploys a ACS to a Ubuntu server
-- name: Set up Apache
-  hosts: ACS_Frontend
-  sudo: True
-  tags: apache
-  roles:
-    - apache
-
-- name: Set up Django
-  hosts: ACS_Frontend
-  sudo: True
-  tags: django
-  roles:
-    - django
 
 - name: Set up Solr
   hosts: Solr_server
@@ -22,6 +9,20 @@
     - solr
   vars:
     acs_search_github_url: https://raw.githubusercontent.com/altran/ACSSearch
+
+- name: Set up Django
+  hosts: ACS_Frontend
+  sudo: True
+  tags: django
+  roles:
+    - django
+
+- name: Set up Apache
+  hosts: ACS_Frontend
+  sudo: True
+  tags: apache
+  roles:
+    - apache
 
 - name: Set up Libreoffice for pdf/office export
   hosts: ACS_Frontend

@@ -1,0 +1,12 @@
+- name: creating /etc/postfix
+  file: path=/etc/postfix state=directory owner=root
+
+- name: mailname
+  template: src=postfix/mailname.jinja dest=/etc/mailname owner=root mode=644
+- name: postfix configuration
+  template: src=postfix/main.cf.jinja dest=/etc/postfix/main.cf owner=root mode=644
+- name: install postfix
+  shell: >
+    DEBIAN_FRONTEND=noninteractive apt-get install -y -q --force-yes postfix
+    creates=/usr/sbin/postfix
+sudo: yes
