@@ -23,6 +23,9 @@
 - name: Copy ACS Apache config
   copy: src=acs.conf dest=/etc/apache2/sites-available/acs.conf owner=root group=root mode=644
 
+- name: Remove Apache default conf
+  file: dest=/etc/apache2/sites-enabled/000-default state=absent
+
 - name: Create dir for WSGI.py symlink
   file: state=directory recurse=yes path=/var/www/acs owner=root group=root
 

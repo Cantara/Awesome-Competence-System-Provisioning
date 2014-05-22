@@ -37,7 +37,7 @@
   sudo_user: acs-user
 
 - name: Configure Django localsettings.py
-  template: src=localsettings.py.jinja dest=/home/acs-user/acs/cvapp/localsettings.py backup=yes owner=acs-user group=www-data
+  template: src=localsettings.py.jinja dest=/home/acs-user/acs/cvapp/localsettings.py backup=yes owner=acs-user group=www-data mode=0644
 
 #- name: Install django-webodt
 #easy_install: name:django-webodt
@@ -59,7 +59,10 @@
   shell: echo "yes" | python /home/acs-user/acs/cvapp/manage.py collectstatic
 
 - name: Copy Solr password file
-  template: src=solr-password.jinja dest=/home/acs-user/password backup=yes owner=acs-user
+  template: src=solr-password.jinja dest=/home/acs-user/password backup=yes owner=acs-user group=www-data mode=644
 
 - name: Index ACS site in Solr
   shell: echo "y" | python /home/acs-user/acs/cvapp/manage.py rebuild_index
+
+- name: Set file ownership of all acs correctly
+  file: state=directory recurse=yes path=/home/acs-user/acs owner=www-data group=www-data

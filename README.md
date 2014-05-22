@@ -6,21 +6,17 @@ Ansible powered provisioner for Ubuntu
 Requirements
 ============
 Ansible http://www.ansible.com
-Ubuntu server
+Ubuntu server which requires Quantal for Libreoffice to be easily installed
 ssh key located in .ssh/id_dsa or equivalent
 
-Usage
-=====
-
-Provisioning a Ubuntu server on EC2
------------------------------------
-
-To provison - Amazon AWS Access key and Secret must be entered into provision-ubuntu-yml. Remember to NOT CHECK IN these variables! 
-ansible-playbook -i hosts provision-ubuntu.yml
-
+Configuration
+-------------
+The following files must be added and set correctly
+* ./hosts <- Addresses to servers to be used
+* ./roles/django/vars/main.yml <- Secrets to DB, server address and so on
 
 
 Setting up ACS
 --------------
 
-ansible-playbook -i hosts site.yml
+ansible-playbook provision-acs.yml
