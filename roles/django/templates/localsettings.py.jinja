@@ -2,7 +2,7 @@ ADMINS = (
     ('Leon', 'leon.ho@altran.com'),
 )
 
-ALLOWED_HOSTS = ['acs.altrancloud.com']
+ALLOWED_HOSTS = ['{{frontend_server_name}}']
 
 MANAGERS = ADMINS
 
@@ -15,7 +15,7 @@ APP_URL = 'https://'+ALLOWED_HOSTS[0]
 DATABASES = {
     'default': {
         'ENGINE':'django.db.backends.postgresql_psycopg2',
-        'NAME': 'acs2',
+        'NAME': '{{db_ident}}',
         'USER': '{{db_user}}',
         'PASSWORD': '{{db_password}}',
         'HOST': '{{db_host}}',
@@ -27,11 +27,11 @@ DATABASES = {
 APP_NAME = 'ACS'
 APP_SECRET = '{{acs_secret}}'
 
-SSO_URL = 'https://sso.altran.se/'
+SSO_URL = '{{sso_url}}'
 
 TESTTOKEN = ''
 
 TESTTOKEN2 = ''
 
 # SOLR
-SOLRURL = 'https://acssolr:acssolr@'+ALLOWED_HOSTS[0]+'/solr/acs/select'
+SOLRURL = 'https://{{solr_username}}:{{solr_password}}@'+ALLOWED_HOSTS[0]+'/solr/acs/select'

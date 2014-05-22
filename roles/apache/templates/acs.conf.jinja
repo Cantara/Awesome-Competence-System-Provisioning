@@ -15,15 +15,13 @@ Alias /static/ /var/www/static/
 </Directory>
 
 <VirtualHost *:80>
-       ServerName cv.altran.se
-       ServerAlias acs.altrancloud.com
-       Redirect / https://cv.altran.se/
+       ServerName {{frontend_server_name}}
+       Redirect / https://{{frontend_server_name}}/
 </VirtualHost>
 
 <VirtualHost *:443>
 
-        ServerName cv.altran.se
-        ServerAlias acs.altrancloud.com
+        ServerName {{frontend_server_name}}
 
         WSGIScriptAlias / /home/acs-user/acs/cvapp/wsgi.py
 

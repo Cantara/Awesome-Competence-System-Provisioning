@@ -1,6 +1,0 @@
----
-# Variables used by acs
-
-httpd_port: 80
-apache_server_name: altubutu01
-servername: altubuntu1.cloudapp.net

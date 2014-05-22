@@ -21,7 +21,7 @@
   service: name=postfix state=restarted
 
 - name: Copy ACS Apache config
-  copy: src=acs.conf dest=/etc/apache2/sites-available/acs.conf owner=root group=root mode=644
+  template: src=acs.conf.jinja dest=/etc/apache2/sites-available/acs.conf owner=root group=root mode=644
 
 - name: Remove Apache default conf
   file: dest=/etc/apache2/sites-enabled/000-default state=absent
