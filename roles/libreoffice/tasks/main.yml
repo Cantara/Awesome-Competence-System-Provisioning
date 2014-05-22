@@ -2,9 +2,18 @@
 #- name: Install Libreoffice
 #  apt: name=libreoffice
 
+- name: Set apt-repository for Libreoffice 3.6.2
+  apt_repository: repo='ppa:libreoffice/libreoffice-3-6' update_cache=yes
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'quantal'
+
+- name: Install Libreoffice
+  apt: name=libreoffice
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'quantal'
+
+
 #Note problems with installing/finding libreoffice 3.6.2
-#The following code snippets will install libreoffice on an old Ubuntu 
-#sudo add-apt-repository ppa:libreoffice/libreoffice-3-6
+#The following code snippets will install libreoffice on an old Ubuntu Quantal
+#sudo add-apt-repository
 # sudo apt-get update
 # sudo apt-get install libreoffice
 #when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'quantal'
@@ -15,8 +24,6 @@
   #sudo_user: acs-user
   
 
-#- name: Configure Libreoffice
-#  shell: soffice --invisible --headless "--accept=socket,host=localhost,port=2002;urp;"
-#  sudo_user: acs-user
-#  sudo: True
-#  tags: libreoffice
+- name: Configure Libreoffice
+  shell: soffice --invisible --headless "--accept=socket,host=localhost,port=2002;urp;"
+  sudo_user: acs-user

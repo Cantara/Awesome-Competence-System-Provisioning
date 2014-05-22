@@ -1,5 +1,5 @@
 ADMINS = (
-    ('Leon', 'leon.ho@altran.com'),
+    ('{{django_admin_user}}', '{{django_admin_email}}'),
 )
 
 ALLOWED_HOSTS = ['{{frontend_server_name}}']
@@ -19,12 +19,12 @@ DATABASES = {
         'USER': '{{db_user}}',
         'PASSWORD': '{{db_password}}',
         'HOST': '{{db_host}}',
-        'PORT': '5432',
+        'PORT': '{{db_port}}',
         },
     }
 
 # Whydah App Auth
-APP_NAME = 'ACS'
+APP_NAME = '{{acs_app_name}}'
 APP_SECRET = '{{acs_secret}}'
 
 SSO_URL = '{{sso_url}}'

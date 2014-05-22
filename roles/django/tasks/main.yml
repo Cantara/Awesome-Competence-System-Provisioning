@@ -53,7 +53,10 @@
     - /var/www/media/templates
 
 - name: Create Django Log directory
-  file: state=touch recurse=yes path=/var/log/django/logfile owner=www-data group=www-data
+  file: state=directory recurse=yes path=/var/log/django owner=www-data group=www-data
+
+- name: Touch django log file for correct rights
+  file: state=touch path=/var/log/django/logfile owner=www-data group=www-data
 
 - name: Python Collect static files into /var/www/static
   shell: echo "yes" | python /home/acs-user/acs/cvapp/manage.py collectstatic

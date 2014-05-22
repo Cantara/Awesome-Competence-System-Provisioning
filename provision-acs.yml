@@ -16,9 +16,6 @@
   tags: django
   roles:
     - django
-  vars:
-    frontend_server_name: acs.altrancloud.com
-    sso_url: https://sso.altran.se/
 
 - name: Set up Apache
   hosts: ACS_Frontend
@@ -26,8 +23,6 @@
   tags: apache
   roles:
     - apache
-  vars:
-    frontend_server_name: acs.altrancloud.com
 
 - name: Set up Libreoffice for pdf/office export
   hosts: ACS_Frontend
