@@ -68,4 +68,7 @@
   shell: echo "y" | python /home/acs-user/acs/cvapp/manage.py rebuild_index
 
 - name: Set file ownership of all acs correctly
-  file: state=directory recurse=yes path=/home/acs-user/acs owner=www-data group=www-data
+  file: state=file path={{item}} owner=acs-user group=www-data mode=644
+  with_items:
+    - /home/acs-user/acs/cvapp/localsettings.pyc
+    - /home/acs-user/acs/cvapp/settings.pyc
