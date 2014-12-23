@@ -21,7 +21,7 @@
   sudo_user: solr
 
 - name: solr upstart conf
-  copy: src=solr-upstart.conf dest=/etc/init/solr.conf owner=root mode=644
+  copy: src=solr-upstart.conf dest=/etc/init/solr.conf owner=root mode=644 backup=yes
 
 - name: Start Solr service
   service: name=solr state=started

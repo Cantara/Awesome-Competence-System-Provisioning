@@ -26,6 +26,9 @@
 - name: Remove Apache default conf
   file: dest=/etc/apache2/sites-enabled/000-default state=absent
 
+- name: Remove Default Ubuntu Apache index.html
+  file: dest=/var/www/html/index.html state=absent backup=yes
+
 - name: Create dir for WSGI.py symlink
   file: state=directory recurse=yes path=/var/www/acs owner=root group=root
 
