@@ -34,5 +34,6 @@
 
 - name: Create symlink for ACS apache conf
   file: src=/etc/apache2/sites-available/acs.conf dest=/etc/apache2/sites-enabled/acs.conf owner=root group=root state=link
-  notify:
-    - restart apache
+
+- name: restart apache
+  service: name=apache2 state=restarted enabled=yes

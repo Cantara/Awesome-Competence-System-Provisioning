@@ -6,7 +6,7 @@
    - openjdk-7-source
 
 - name: create "Solr" user solr
-  user: name=solr
+  user: name=solr shell="/bin/bash"
 
 - name: Copy Solr startup script
   get_url: url={{acs_search_github_url}}/master/{{item}} dest=/home/solr/{{item}} mode=0744

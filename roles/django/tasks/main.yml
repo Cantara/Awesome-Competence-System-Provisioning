@@ -29,7 +29,7 @@
     extra_args='--upgrade'
 
 - name: create "Django" user acs-user
-  user: name=acs-user group=www-data
+  user: name=acs-user group=www-data shell="/bin/bash"
 
   # This script will not always run and may require to be run manually
 - name: Git clone Awesome-Competence-System into acs-user
